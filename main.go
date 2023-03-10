@@ -1,7 +1,8 @@
 package main
 
-import "fmt"
+import "local_swap/router"
 
 func main() {
-	fmt.Println("hello, world")
+	r := router.Build()
+	r.Run()
 }
