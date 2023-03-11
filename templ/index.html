@@ -44,6 +44,17 @@
 		<div class="fixed-bottom btn btn-dark" id="upload">
 			<div class="picow h1">up!</div>
 		</div>
+		<div class="fixed-bottom" id="multi" style="display: none;">
+			<div class="btn btn-dark w-25" id="text">
+				<div class="picow h1">tex</div>
+			</div>
+			<div class="btn btn-dark w-50" id="file">
+				<div class="picow h1">file</div>
+			</div>
+			<div class="btn btn-dark float-end" id="back">
+				<div class="picow h1">x</div>
+			</div>
+		</div>
 	</body>
 </html>
 <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -54,8 +65,13 @@
 		location.reload()
 	});
 	$("#upload").click(function() {
-		
+		$("#upload").hide()
+		$("#multi").show()
 	});
+	$("#back").click(function() {
+		$("#multi").hide()
+		$("#upload").show()
+	})
 	var text_list = [];
 	$.post(
 		"/",
