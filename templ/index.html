@@ -54,7 +54,7 @@
 	$.post(
 		"/",
 		function(data) {
-			console.log(data.ip);
+			console.log(data);
 			if(data.ip != ":(") {
 				$("#url").text(data.ip);
 				$("#pre").text("se|")
