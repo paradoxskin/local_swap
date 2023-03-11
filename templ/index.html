@@ -71,7 +71,23 @@
 	$("#back").click(function() {
 		$("#multi").hide()
 		$("#upload").show()
-	})
+	});
+	$("#text").click(function() {
+		var text = prompt("WT IT:")
+		// send
+		$.post(
+			"/text",
+			{"text": text}
+		)
+		text_list.push(text);
+		$("#text_list").append("<div class=\"h2\"> <img src=\"/svg/text.svg\" alt=\"Bootstrap\" width=\"32\" height=\"32\"> <span class=\"picow\">"+text.substr(0, 10)+"</span> <span class=\"btn btn-dark float-end\" id=\""+"t_"+(text_list.length-1)+"\"><span class=\"picob\">copy</span></span> </div>");
+		$("#t_"+(text_list.length - 1)).click(function(){
+			$("#copy").text(text_list[this.id.substr(2)]).show();
+			document.getElementById("copy").select();
+			document.execCommand("copy", false, null);
+			$("#copy").hide();
+		});
+	});
 	var text_list = [];
 	$.post(
 		"/",
@@ -81,12 +97,12 @@
 				$("#url").text(data.ip);
 				$("#pre").text("se|");
 			}
-			for(var i = 0; i < data.types.length; i++) {
+			for(var i = 0; i < data.files.length; i++) {
 				console.log(data.files[i]);
 			}
 			for(var i = 0; i < data.texts.length; i++) {
 				text_list.push(data.texts[i]);
-				$("#text_list").append("<div class=\"h2\"> <img src=\"/svg/text.svg\" alt=\"Bootstrap\" width=\"32\" height=\"32\"> <span class=\"picow\">"+data.texts[i].substr(0, 17)+"</span> <span class=\"btn btn-info float-end\" id=\""+"t_"+i+"\"><span class=\"picob\">copy</span></span> </div>");
+				$("#text_list").append("<div class=\"h2\"> <img src=\"/svg/text.svg\" alt=\"Bootstrap\" width=\"32\" height=\"32\"> <span class=\"picow\">"+data.texts[i].substr(0, 10)+"</span> <span class=\"btn btn-dark float-end\" id=\""+"t_"+i+"\"><span class=\"picob\">copy</span></span> </div>");
 				$("#t_"+i).click(function(){
 					$("#copy").text(text_list[this.id.substr(2)]).show();
 					document.getElementById("copy").select();

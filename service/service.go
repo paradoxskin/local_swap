@@ -54,10 +54,6 @@ func GetText() []string {
 	return texts
 }
 
-func FileType(filename string) string {
-	return ":)"
-}
-
 func CleanAll() {
 	
 }

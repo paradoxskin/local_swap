@@ -8,17 +8,11 @@ func GetPage(c *gin.Context) {
 }
 
 func PostFileList(c *gin.Context) {
-	files := service.GetFiles()
-	var types []string
-	for _, filename := range files {
-		types = append(types, service.FileType(filename))
-	}
 	c.JSON(200, map[string]interface{}{
 		"msg": "ok",
 		"ip": service.GetIP(),
-		"files": files,
+		"files": service.GetFiles(),
 		"texts": service.GetText(),
-		"types": types,
 	})
 }
 
@@ -28,4 +22,9 @@ func UploadFile(c *gin.Context) {
 
 func Download(c *gin.Context) {
 	
+}
+
+func PostText(c *gin.Context) {
+	text := c.PostForm("text")
+	service.WriteText(text)
 }

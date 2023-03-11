@@ -18,6 +18,7 @@ func Build() *gin.Engine {
 
 	r.GET("/", controller.GetPage)
 	r.POST("/", controller.PostFileList)
+	r.POST("/text", controller.PostText)
 	r.POST("/upload", controller.UploadFile)
 	r.POST("/download", controller.Download)
 	return r
