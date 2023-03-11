@@ -29,10 +29,19 @@
 			<div class="picow h2">se|<span class="picob">233</span></div>
 		</div>
 
-		<div class="">
+		<div class="" id="file_list">
 			<div class="h2">
+				<img src="/svg/text.svg" alt="Bootstrap" width="32" height="32">
 				<span class="picob">List</span>
-				<span class="btn btn-light"><span class="picow">dLd!</span></span>
+				<span class="btn btn-light float-end"><span class="picow">down</span></span>
+			</div>
+		</div>
+
+		<div class="" id="text_list">
+			<div class="h2">
+				<img src="/svg/text.svg" alt="Bootstrap" width="32" height="32">
+				<span class="picow">text</span>
+				<span class="btn btn-info float-end"><span class="picob">copy</span></span>
 			</div>
 		</div>
 
@@ -58,6 +67,13 @@
 			if(data.ip != ":(") {
 				$("#url").text(data.ip);
 				$("#pre").text("se|")
+			}
+			for(var i = 0; i < data.types.length; i++) {
+				console.log(data.files[i])
+			}
+			for(var i = 0; i < data.texts.length; i++) {
+				$("#text_list").append("<div class=\"h2\"> <img src=\"/svg/text.svg\" alt=\"Bootstrap\" width=\"32\" height=\"32\"> <span class=\"picow\">"+data.texts[i]+"</span> <span class=\"btn btn-info float-end\"><span class=\"picob\">copy</span></span> </div>");
+
 			}
 		}
 	);

@@ -14,6 +14,7 @@ func Build() *gin.Engine {
 	r.Static("/css", "static/css")
 	r.Static("/font", "static/fonts")
 	r.Static("/files", "static/files")
+	r.Static("/svg", "static/svg")
 
 	r.GET("/", controller.GetPage)
 	r.POST("/", controller.PostFileList)
