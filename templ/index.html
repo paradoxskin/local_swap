@@ -121,18 +121,22 @@
 				$("#url").text(data.ip);
 				$("#pre").text("se|");
 			}
-			for(var i = 0; i < data.files.length; i++) {
-				$("#file_list").append("<div class=\"h2\"> <img src=\"/svg/gift.svg\" alt=\"Bootstrap\" width=\"32\" height=\"32\"> <span class=\"picob\">"+data.files[i]+"</span> <a target=\"blank\" href=\"/files/"+data.files[i]+"\" download=\""+data.files[i]+"\" class=\"btn btn-light w-25 float-end\"><span class=\"picow\">down</span></a> </div>");
+			if(data.files != null){
+				for(var i = 0; i < data.files.length; i++) {
+					$("#file_list").append("<div class=\"h2\"> <img src=\"/svg/gift.svg\" alt=\"Bootstrap\" width=\"32\" height=\"32\"> <span class=\"picob\">"+data.files[i]+"</span> <a target=\"blank\" href=\"/files/"+data.files[i]+"\" download=\""+data.files[i]+"\" class=\"btn btn-light w-25 float-end\"><span class=\"picow\">down</span></a> </div>");
+				}
 			}
-			for(var i = 0; i < data.texts.length; i++) {
-				text_list.push(data.texts[i]);
-				$("#text_list").append("<div class=\"h2\"> <img src=\"/svg/text.svg\" alt=\"Bootstrap\" width=\"32\" height=\"32\"> <span class=\"picow\">"+data.texts[i].substr(0, 10)+"</span> <span class=\"btn btn-dark w-25 float-end\" id=\""+"t_"+i+"\"><span class=\"picob\">copy</span></span> </div>");
-				$("#t_"+i).click(function(){
-					$("#copy").text(text_list[this.id.substr(2)]).show();
-					document.getElementById("copy").select();
-					document.execCommand("copy", false, null);
-					$("#copy").hide();
-				});
+			if(data.texts != null){
+				for(var i = 0; i < data.texts.length; i++) {
+					text_list.push(data.texts[i]);
+					$("#text_list").append("<div class=\"h2\"> <img src=\"/svg/text.svg\" alt=\"Bootstrap\" width=\"32\" height=\"32\"> <span class=\"picow\">"+data.texts[i].substr(0, 10)+"</span> <span class=\"btn btn-dark w-25 float-end\" id=\""+"t_"+i+"\"><span class=\"picob\">copy</span></span> </div>");
+					$("#t_"+i).click(function(){
+						$("#copy").text(text_list[this.id.substr(2)]).show();
+						document.getElementById("copy").select();
+						document.execCommand("copy", false, null);
+						$("#copy").hide();
+					});
+				}
 			}
 		}
 	);

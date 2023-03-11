@@ -50,6 +50,8 @@ func GetText() []string {
 			texts = append(texts, text)
 		}
 		f_read = 1
+	} else if(len(texts) == 0) {
+		f_read = 1
 	}
 	return texts
 }
@@ -59,6 +61,7 @@ func CleanAll() {
 		os.Remove("./static/files/"+filename)
 	}
 	os.Remove("./static/text")
+	texts = []string{}
 }
 
 func WriteText(text string) int {
