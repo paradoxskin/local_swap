@@ -20,6 +20,6 @@ func Build() *gin.Engine {
 	r.POST("/", controller.PostFileList)
 	r.POST("/text", controller.PostText)
 	r.POST("/upload", controller.UploadFile)
-	r.POST("/download", controller.Download)
+	r.POST("/clean", controller.CleanAll)
 	return r
 }

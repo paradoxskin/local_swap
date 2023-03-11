@@ -5,10 +5,10 @@ import "io/ioutil"
 import "os"
 import "io"
 import "bufio"
-//import "fmt"
 
 var texts []string
 var f_read int = 0
+
 func GetIP() string {
 	addrs, err := net.InterfaceAddrs()
 	if err != nil {
@@ -55,7 +55,10 @@ func GetText() []string {
 }
 
 func CleanAll() {
-	
+	for _, filename := range GetFiles() {
+		os.Remove("./static/files/"+filename)
+	}
+	os.Remove("./static/text")
 }
 
 func WriteText(text string) int {
@@ -65,6 +68,6 @@ func WriteText(text string) int {
 		return 0
 	}
 	defer file.Close()
-	file.WriteString(text)
+	file.WriteString(text+"\n")
 	return 1
 }
