@@ -30,14 +30,9 @@
 		</div>
 
 		<div class="" id="file_list">
-			<div class="h2">
-				<img src="/svg/gift.svg" alt="Bootstrap" width="32" height="32">
-				<span class="picob">List</span>
-				<span class="btn btn-light float-end"><span class="picow">down</span></span>
-			</div>
-			<textarea id="copy" style="display: none;"></textarea>
 		</div>
 
+		<textarea id="copy" style="display: none;"></textarea>
 		<div class="" id="text_list">
 		</div>
 
@@ -98,7 +93,7 @@
 				$("#pre").text("se|");
 			}
 			for(var i = 0; i < data.files.length; i++) {
-				console.log(data.files[i]);
+				$("#file_list").append("<div class=\"h2\"> <img src=\"/svg/gift.svg\" alt=\"Bootstrap\" width=\"32\" height=\"32\"> <span class=\"picob\">"+data.files[i]+"</span> <a target=\"blank\" href=\"/files/"+data.files[i]+"\" download=\"test.mp3\" class=\"btn btn-light float-end\"><span class=\"picow\">down</span></a> </div>");
 			}
 			for(var i = 0; i < data.texts.length; i++) {
 				text_list.push(data.texts[i]);
