@@ -26,8 +26,13 @@ func UploadFile(c *gin.Context) {
 		return
 	}
 	ls := strings.Split(file.Filename, ".")
-	lst := ls[len(ls) - 1]
-	filename := fmt.Sprintf("%x.%s", time.Now().Unix(), lst)
+	var filename string
+	if len(ls) != 1 {
+		lst := ls[len(ls) - 1]
+		filename = fmt.Sprintf("%x.%s", time.Now().Unix(), lst)
+	} else {
+		filename = fmt.Sprintf("%x", time.Now().Unix())
+	}
 	c.SaveUploadedFile(file, fmt.Sprintf("./static/files/%s", filename))
 	c.JSON(200, map[string]string{
 		"filename": filename,

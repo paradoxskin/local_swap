@@ -104,7 +104,7 @@
 			{"text": text}
 		);
 		text_list.push(text);
-		$("#text_list").append("<div class=\"h2\"> <img src=\"/svg/text.svg\" alt=\"Bootstrap\" width=\"32\" height=\"32\"> <span class=\"picow\">"+text.substr(0, 15)+"</span> <span class=\"btn btn-dark w-25 float-end\" id=\""+"t_"+(text_list.length-1)+"\"><span class=\"picob\">copy</span></span> </div>");
+		$("#text_list").append("<div class=\"h2\"> <img src=\"/svg/text.svg\" alt=\"Bootstrap\" width=\"32\" height=\"32\"> <span class=\"picow\">"+text.substr(0, 10)+"</span> <span class=\"btn btn-dark w-25 float-end\" id=\""+"t_"+(text_list.length-1)+"\"><span class=\"picob\">copy</span></span> </div>");
 		$("#t_"+(text_list.length - 1)).click(function(){
 			$("#copy").text(text_list[this.id.substr(2)]).show();
 			document.getElementById("copy").select();
