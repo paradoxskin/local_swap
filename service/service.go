@@ -42,17 +42,22 @@ func GetText() []string {
 		}
 		reader := bufio.NewReader(file)
 		for {
-			text, err := reader.ReadString('\n')
-			if err == io.EOF {
-				break
+			text := ""
+			for {
+				chunk, err := reader.ReadString('\n')
+				if err == io.EOF {
+					goto end
+				}
+				if chunk == "{@@>\n" {
+					break
+				}
+				text += chunk
 			}
-			text = text[0:len(text)-1]
-			texts = append(texts, text)
+			texts = append(texts, text[0:len(text)-1])
 		}
-		f_read = 1
-	} else if(len(texts) == 0) {
-		f_read = 1
 	}
+end:
+	f_read = 1
 	return texts
 }
 
@@ -71,6 +76,6 @@ func WriteText(text string) int {
 		return 0
 	}
 	defer file.Close()
-	file.WriteString(text+"\n")
+	file.WriteString(text+"\n{@@>\n")
 	return 1
 }

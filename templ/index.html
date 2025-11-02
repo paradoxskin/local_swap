@@ -22,6 +22,16 @@
 		</style>
 	</head>
 	<body class="bg-success">
+		<span id="wait" style="display:none;">
+			<div class="position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-75 d-flex justify-content-center align-items-center text-white fs-1 fw-bold picow" style="z-index:1050;">u wait...</div>
+		</span>
+		<span id="write" style="display:none;">
+			<div class="position-fixed top-0 start-0 w-100 h-100 d-flex flex-column justify-content-center align-items-center bg-dark bg-opacity-75 text-white" style="z-index:1050;">
+				<button id="closeTextModal" type="button" class="btn-close btn-close-white mb-3"></button>
+				<textarea id="textInput" class="form-control bg-secondary w-75" rows="1" placeholder="WT IT"></textarea>
+				<button id="submitText" type="button" class="btn btn-dark w-75"><span class="picow">ok</span></button>
+			</div>
+		</span>
 		<div class="fixed-top btn btn-success" id="flash">
 			<div class="picow h2"><span id="pre"></span><span class="picob" id="url"></span></div>
 		</div>
@@ -36,13 +46,13 @@
 		<div class="" id="text_list">
 		</div>
 
-		<input type="file" id="select" style="display: none;">
+		<input type="file" id="select" style="display: none;" multiple>
 		<div class="fixed-bottom btn btn-dark" id="upload">
 			<div class="picow h1">up!</div>
 		</div>
 		<div class="fixed-bottom" id="multi" style="display: none;">
 			<div class="btn btn-dark w-25" id="text">
-				<div class="picow h1">tex</div>
+				<div class="picow h1">t</div>
 			</div>
 			<div class="btn btn-dark w-50" id="file">
 				<div class="picow h1">file</div>
@@ -75,28 +85,43 @@
 		$("#select").click();
 	});
 	$("#delete").click(function() {
-		$.post(
-			"/clean"
-		);
-		location.reload();
-	});
-	$("#select").change(function() {
-		var formData = new FormData();
-		formData.append("file", document.getElementById("select").files[0]);
-		$.ajax({
-			url: "/upload",
-			data: formData,
-			processData: false,
-			contentType: false,
-			type: "POST",
-			success: function(data) {
-				$("#file_list").append("<div class=\"h2\"> <img src=\"/svg/gift.svg\" alt=\"Bootstrap\" width=\"32\" height=\"32\"> <span class=\"picob\">"+data.filename+"</span> <a target=\"blank\" href=\"/files/"+data.filename+"\" download=\""+data.filename+"\" class=\"btn btn-light w-25 float-end\"><span class=\"picow\">down</span></a> </div>");
-			}
+		$.get("/cleanit", function() {
+			location.reload();
 		});
 	});
-	$("#text").click(function() {
-		var text = prompt("WT IT:")
-		if(text == ""){
+	$("#select").change(function() {
+		var files = document.getElementById("select").files;
+		var fin = 0;
+		$("#wait")[0].style.display="flex";
+		for (let i = 0; i < files.length; i++) {
+			var formData = new FormData();
+			formData.append("file", files[i]);
+			$.ajax({
+				url: "/upload",
+				data: formData,
+				processData: false,
+				contentType: false,
+				type: "POST",
+				success: function(data) {
+					$("#file_list").prepend("<div class=\"h2\"> <img src=\"/svg/gift.svg\" alt=\"Bootstrap\" width=\"32\" height=\"32\"> <span class=\"picob\">"+data.filename+"</span> <a target=\"blank\" href=\"/files/"+data.filename+"\" download=\""+data.filename+"\" class=\"btn btn-light w-25 float-end\"><span class=\"picow\">down</span></a> </div>");
+				},
+				complete: function() {
+					fin++;
+					if (fin == files.length) {
+						$("#wait")[0].style.display="none";
+					}
+				}
+			});
+		}
+	});
+	$("#closeTextModal").click(function() {
+		$("#write")[0].style.display = "none";
+		$("#textInput")[0].value = "";
+	});
+	$("#submitText").click(function() {
+		var text = $("#textInput")[0].value;
+		if(text == "" || text == null){
+			$("#closeTextModal")[0].click()
 			return;
 		}
 		$.post(
@@ -104,13 +129,17 @@
 			{"text": text}
 		);
 		text_list.push(text);
-		$("#text_list").append("<div class=\"h2\"> <img src=\"/svg/text.svg\" alt=\"Bootstrap\" width=\"32\" height=\"32\"> <span class=\"picow\">"+text.substr(0, 10)+"</span> <span class=\"btn btn-dark w-25 float-end\" id=\""+"t_"+(text_list.length-1)+"\"><span class=\"picob\">copy</span></span> </div>");
+		$("#text_list").prepend("<div class=\"h2\"> <img src=\"/svg/text.svg\" alt=\"Bootstrap\" width=\"32\" height=\"32\"> <span class=\"picow\">"+text.substr(0, 10)+"</span> <span class=\"btn btn-dark w-25 float-end\" id=\""+"t_"+(text_list.length-1)+"\"><span class=\"picob\">copy</span></span> </div>");
 		$("#t_"+(text_list.length - 1)).click(function(){
 			$("#copy").text(text_list[this.id.substr(2)]).show();
 			document.getElementById("copy").select();
 			document.execCommand("copy", false, null);
 			$("#copy").hide();
 		});
+		$("#closeTextModal")[0].click()
+	});
+	$("#text").click(function() {
+		$("#write")[0].style.display = "flex";
 	});
 	var text_list = [];
 	$.post(
@@ -123,13 +152,13 @@
 			}
 			if(data.files != null){
 				for(var i = 0; i < data.files.length; i++) {
-					$("#file_list").append("<div class=\"h2\"> <img src=\"/svg/gift.svg\" alt=\"Bootstrap\" width=\"32\" height=\"32\"> <span class=\"picob\">"+data.files[i]+"</span> <a target=\"blank\" href=\"/files/"+data.files[i]+"\" download=\""+data.files[i]+"\" class=\"btn btn-light w-25 float-end\"><span class=\"picow\">down</span></a> </div>");
+					$("#file_list").prepend("<div class=\"h2\"> <img src=\"/svg/gift.svg\" alt=\"Bootstrap\" width=\"32\" height=\"32\"> <span class=\"picob\">"+data.files[i]+"</span> <a target=\"blank\" href=\"/files/"+data.files[i]+"\" download=\""+data.files[i]+"\" class=\"btn btn-light w-25 float-end\"><span class=\"picow\">down</span></a> </div>");
 				}
 			}
 			if(data.texts != null){
 				for(var i = 0; i < data.texts.length; i++) {
 					text_list.push(data.texts[i]);
-					$("#text_list").append("<div class=\"h2\"> <img src=\"/svg/text.svg\" alt=\"Bootstrap\" width=\"32\" height=\"32\"> <span class=\"picow\">"+data.texts[i].substr(0, 10)+"</span> <span class=\"btn btn-dark w-25 float-end\" id=\""+"t_"+i+"\"><span class=\"picob\">copy</span></span> </div>");
+					$("#text_list").prepend("<div class=\"h2\"> <img src=\"/svg/text.svg\" alt=\"Bootstrap\" width=\"32\" height=\"32\"> <span class=\"picow\">"+data.texts[i].substr(0, 10)+"..</span> <span class=\"btn btn-dark w-25 float-end\" id=\""+"t_"+i+"\"><span class=\"picob\">copy</span></span> </div>");
 					$("#t_"+i).click(function(){
 						$("#copy").text(text_list[this.id.substr(2)]).show();
 						document.getElementById("copy").select();
@@ -138,6 +167,7 @@
 					});
 				}
 			}
+			$("#text_list").append("<div class=\"h2\"> <img src=\"/svg/text.svg\" alt=\"Bootstrap\" width=\"32\" height=\"32\"> <span class=\"picow\">BOTTOM</span></div>");
 		}
 	);
 </script>

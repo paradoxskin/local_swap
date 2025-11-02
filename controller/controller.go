@@ -5,6 +5,10 @@ import "local_swap/service"
 import "fmt"
 import "time"
 import "strings"
+import "sync"
+
+var mu sync.Mutex
+var count uint8
 
 func GetPage(c *gin.Context) {
 	c.HTML(200, "index.html", gin.H{})
@@ -20,6 +24,8 @@ func PostFileList(c *gin.Context) {
 }
 
 func UploadFile(c *gin.Context) {
+	mu.Lock()
+	defer mu.Unlock()
 	file, err := c.FormFile("file")
 	if err != nil {
 		c.JSON(500, "error")
@@ -29,10 +35,11 @@ func UploadFile(c *gin.Context) {
 	var filename string
 	if len(ls) != 1 {
 		lst := ls[len(ls) - 1]
-		filename = fmt.Sprintf("%x.%s", time.Now().Unix(), lst)
+		filename = fmt.Sprintf("%x_%02x.%s", time.Now().Unix(), count, lst)
 	} else {
-		filename = fmt.Sprintf("%x", time.Now().Unix())
+		filename = fmt.Sprintf("%x_%02x", count, time.Now().Unix())
 	}
+	count += 1
 	c.SaveUploadedFile(file, fmt.Sprintf("./static/files/%s", filename))
 	c.JSON(200, map[string]string{
 		"filename": filename,

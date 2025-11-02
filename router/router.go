@@ -17,9 +17,9 @@ func Build() *gin.Engine {
 	r.Static("/svg", "static/svg")
 
 	r.GET("/", controller.GetPage)
+	r.GET("/cleanit", controller.CleanAll)
 	r.POST("/", controller.PostFileList)
 	r.POST("/text", controller.PostText)
 	r.POST("/upload", controller.UploadFile)
-	r.POST("/clean", controller.CleanAll)
 	return r
 }
